@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"sync"
 	"time"
@@ -86,7 +87,7 @@ func hostUpdateFallback(action models.HostMqAction, node *models.Node) error {
 	}
 	endpoint := httpclient.JSONEndpoint[models.SuccessResponse, models.ErrorResponse]{
 		URL:           "https://" + server.API,
-		Route:         fmt.Sprintf("/api/v1/fallback/host/%s", host.ID.String()),
+		Route:         fmt.Sprintf("/api/v1/fallback/host/%s", url.QueryEscape(host.ID.String())),
 		Method:        http.MethodPut,
 		Data:          models.HostUpdate{Host: host.Host, Action: action, Node: *node},
 		Authorization: "Bearer " + token,
